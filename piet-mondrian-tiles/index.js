@@ -8,7 +8,8 @@ function setup() {
       x: 0,
       y: 0,
       width: innerWidth,
-      height: innerHeight
+      height: innerHeight,
+      split: Math.round(Math.random() * 10)
     }
   );
 }
@@ -38,10 +39,9 @@ function draw() {
 
 function checkSplit(tile) {
   // Is the tile already too small?
-  if (tile.width < innerWidth / 10 || tile.height < innerHeight / 6) return false;
+  if (tile.width < innerWidth / 20 || tile.height < innerHeight / 10) return false;
 
-  // Is the tile a square?
-  return Math.round(Math.random());
+  return tile.split;
 }
 
 function splitTileVertical(tile, i) {
@@ -49,18 +49,28 @@ function splitTileVertical(tile, i) {
   tiles.splice(i, 1);
 
   // Split tile into two new tiles
+  if (tile.size > innerWidth / 3) {
+    splitA = 1;
+    splitB = 1;
+  } else {
+    splitA = Math.round(Math.random() * 10);
+    splitB = Math.round(Math.random() * 10);
+  }
+
   let newTileA = {
     x: tile.x,
     y: tile.y,
     width: tile.width / 2,
-    height: tile.height
+    height: tile.height,
+    split: splitA
   };
 
   let newTileB = {
     x: tile.x + (tile.width / 2),
     y: tile.y,
     width: tile.width / 2,
-    height: tile.height
+    height: tile.height,
+    split: splitB
   };
 
   // Add both new tiles
@@ -73,18 +83,28 @@ function splitTileHorizontal(tile, i) {
   tiles.splice(i, 1);
 
   // Split tile into two new tiles
+  if (tile.size > innerWidth / 3) {
+    splitA = 1;
+    splitB = 1;
+  } else {
+    splitA = Math.round(Math.random() * 10);
+    splitB = Math.round(Math.random() * 10);
+  }
+
   let newTileA = {
     x: tile.x,
     y: tile.y,
     width: tile.width,
-    height: tile.height  / 2
+    height: tile.height / 2,
+    split: splitA
   };
 
   let newTileB = {
     x: tile.x,
     y: tile.y + (tile.height / 2),
     width: tile.width,
-    height: tile.height / 2
+    height: tile.height / 2,
+    split: splitB
   };
 
   // Add both new tiles
