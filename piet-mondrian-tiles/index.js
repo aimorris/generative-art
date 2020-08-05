@@ -1,4 +1,5 @@
 let tiles = [];
+let colors;
 
 function setup() {
   createCanvas(innerWidth, innerHeight);
@@ -12,26 +13,38 @@ function setup() {
       split: Math.round(Math.random() * 10)
     }
   );
-}
 
-function draw() {
+  colors = [color(33, 33, 33), color(33, 33, 33), color(33, 33, 33), color(33, 33, 33), color(33, 33, 33), color(0, 0, 0), color(230, 0, 30), color(250, 200, 0), color(0, 65, 170)];
+
   background(33);
 
   stroke(255);
   strokeWeight(5);
   noFill();
 
-  for (let i = 0; i < tiles.length; i++) {
-    let tile = tiles[i];
-    rect(tile.x, tile.y, tile.width, tile.height);
+  for (let j = 0; j < 100; j++) {
+    for (let i = 0; i < tiles.length; i++) {
+      let tile = tiles[i];
+      rect(tile.x, tile.y, tile.width, tile.height);
+  
+      let color = colors[Math.floor(Math.random() * colors.length)];
+      fill(color);
+  
+      if (checkSplit(tile)) {
+        // 1: split vertically, 0: split horizontally
+        let splitDir;
 
-    if (checkSplit(tile)) {
-      // 1: split vertically, 0: split horizontally
-      let splitDir = Math.round(Math.random());
-      if (splitDir) {
-        splitTileVertical(tile, i);
-      } else {
-        splitTileHorizontal(tile, i);
+        if (tile.height > tile.width) {
+          splitDir = Math.round(Math.random());
+        } else {
+          splitDir = Math.round(Math.random() * 3);
+        }
+
+        if (splitDir) {
+          splitTileVertical(tile, i);
+        } else {
+          splitTileHorizontal(tile, i);
+        }
       }
     }
   }
@@ -39,7 +52,7 @@ function draw() {
 
 function checkSplit(tile) {
   // Is the tile already too small?
-  if (tile.width < innerWidth / 20 || tile.height < innerHeight / 10) return false;
+  if (tile.width < innerWidth / 10 || tile.height < innerHeight / 5) return false;
 
   return tile.split;
 }
@@ -83,7 +96,7 @@ function splitTileHorizontal(tile, i) {
   tiles.splice(i, 1);
 
   // Split tile into two new tiles
-  if (tile.size > innerWidth / 3) {
+  if (tile.height > innerHeight / 3 || tile.width > innerWidth / 5) {
     splitA = 1;
     splitB = 1;
   } else {
