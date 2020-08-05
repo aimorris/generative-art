@@ -1,8 +1,9 @@
 let tiles = [];
 let colors;
+let canvas;
 
 function setup() {
-  createCanvas(innerWidth, innerHeight);
+  canvas = createCanvas(innerWidth, innerHeight);
 
   tiles.push(
     {
@@ -19,7 +20,7 @@ function setup() {
   background(33);
 
   stroke(255);
-  strokeWeight(5);
+  strokeWeight(3);
   noFill();
 
   for (let j = 0; j < 100; j++) {
@@ -32,18 +33,12 @@ function setup() {
   
       if (checkSplit(tile)) {
         // 1: split vertically, 0: split horizontally
-        let splitDir;
-
-        if (tile.height > tile.width) {
-          splitDir = Math.round(Math.random());
-        } else {
-          splitDir = Math.round(Math.random() * 3);
-        }
+        let splitDir = Math.round(Math.random());
 
         if (splitDir) {
-          splitTileVertical(tile, i);
-        } else {
           splitTileHorizontal(tile, i);
+        } else {
+          splitTileVertical(tile, i);
         }
       }
     }
@@ -52,7 +47,7 @@ function setup() {
 
 function checkSplit(tile) {
   // Is the tile already too small?
-  if (tile.width < innerWidth / 10 || tile.height < innerHeight / 5) return false;
+  if (tile.width < innerWidth / 20 || tile.height < innerHeight / 20) return false;
 
   return tile.split;
 }
